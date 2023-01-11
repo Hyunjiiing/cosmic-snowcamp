@@ -1,11 +1,11 @@
 var idx = document.getElementById("idx");
-var ent = document.getElementById("ent");
+var enter = document.getElementById("enter");
 
 const config = {
   method: "get",
 };
 
-ent.addEventListener("click", function () {
+enter.addEventListener("click", function () {
   fetch(
     "https://my-json-server.typicode.com/smashh712/json_placeholder/members/",
     config
