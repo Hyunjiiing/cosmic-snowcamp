@@ -9,36 +9,17 @@ function App() {
     "강남 우동 맛집",
     "파이썬 독학",
   ]); //Destructuring 문법
-  let [likes, likesChange] = useState(0);
-  let [modal, setModal] = useState(false);
+  let [likes, likesChange] = useState([0, 0, 0]);
 
+  let [modal, setModal] = useState(false);
+  let [indexTitle, setIndexTitle] = useState(0);
+  let [inputValue, inputValueChange] = useState("");
   return (
     <div className="App">
       <div className="black-nav">
         <h4>ReactBlog</h4>
       </div>
-      <br></br>
-      <button
-        className="button"
-        onClick={() => {
-          let copy = [...title];
-          copy[0] = "여자 코트 추천";
-          titleChange(copy);
-        }}
-      >
-        글수정
-      </button>
-      <button
-        className="button"
-        onClick={() => {
-          let copy = [...title];
-          copy.sort();
-          titleChange(copy);
-        }}
-      >
-        가나다순
-      </button>
-      <div className="list">
+      {/* <div className="list">
         <h4>
           {title[0]}{" "}
           <span
@@ -65,24 +46,67 @@ function App() {
           {title[2]}
         </h4>
         <p>2월 17일 발행</p>
-      </div>{" "}
-      {title.map(function () {
+      </div> */}
+      {title.map(function (a, i) {
         return (
           <div className="list">
-            <h4>{title[1]}</h4>
+            <h4
+              onClick={() => {
+                setModal(true);
+                setIndexTitle(i);
+              }}
+            >
+              {title[i]}
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  let copy = [...likes];
+                  copy[i] = copy[i] + 1;
+                  likesChange(copy);
+                }}
+              >
+                {" "}
+                💖
+              </span>{" "}
+              {likes[i]}
+            </h4>
             <p>2월 17일 발행</p>
+            <button
+              onClick={() => {
+                let copy = [...title];
+                copy.splice(i, 1);
+                titleChange(copy);
+              }}
+            >
+              삭제
+            </button>
           </div>
         );
       })}
-      {modal == true ? <Modal /> : null}
+
+      <input
+        onChange={(e) => {
+          inputValueChange(e.target.value);
+        }}
+      ></input>
+      <button
+        onClick={() => {
+          let copy = [...title];
+          copy.unshift(inputValue);
+          titleChange(copy);
+        }}
+      >
+        입력
+      </button>
+      {modal == true ? <Modal title={title} indexTitle={indexTitle} /> : null}
     </div>
   );
 }
 
-function Modal() {
+function Modal(props) {
   return (
     <div className="modal">
-      <h4>제목</h4>
+      <h4>{props.title[props.indexTitle]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
     </div>
