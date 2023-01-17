@@ -107,6 +107,7 @@ const Profile = () => {
   return (
     <div className="text">
       <h2>{user.username}</h2>
+      <img src={user.userImgPath} width="120px"></img>
       <div>{user.userJob}</div>
       <div>구독자수 : {user.userFollower}</div>
       <div>작가수 : {user.userFollowing}</div>
