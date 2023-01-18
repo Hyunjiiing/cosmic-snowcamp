@@ -4,26 +4,28 @@ import "./App.css";
 import data from "./data.js";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import DetailPage from "./pages/Detail.js";
+import axios from "axios";
 
 function App() {
-  let [shoes] = useState(data);
+  let [shoes, updateShoes] = useState(data);
   let navigate = useNavigate();
+  let result;
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+          <Navbar.Brand href="#home">Shoeses</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link
               onClick={() => {
-                navigate(-1);
+                navigate("/");
               }}
             >
               Home
             </Nav.Link>
             <Nav.Link
               onClick={() => {
-                navigate("/detail");
+                navigate("/detail/0");
               }}
             >
               Detail
@@ -32,15 +34,14 @@ function App() {
         </Container>
       </Navbar>
 
-      <Link to="/">홈</Link>
-      <Link to="/detail">상세페이지</Link>
-
       <Routes>
         <Route
           path="/"
           element={
             <div>
-              <div className="main-bg"></div>
+              <div className="background">
+                <img src="https://media.istockphoto.com/id/1343547742/vector/snickers-shoes-vector-illustration-cartoon-flat-collection-of-man-woman-fashion-footwear-in.jpg?b=1&s=170667a&w=0&k=20&c=ONJBmeRLapxnejcZohFFly5ev4cJk059Mlq6C_8hZLo="></img>
+              </div>
 
               <div className="container">
                 <div className="row">
@@ -53,19 +54,26 @@ function App() {
           }
         />
         <Route
-          path="/detail"
+          path="/detail/:id"
           element={
             <div>
-              <DetailPage></DetailPage>
+              <DetailPage shoes={shoes} />
             </div>
           }
         />
-        <Route path="*" element={<div>없는 페이지임</div>} />
-        <Route path="/event" element={<About></About>}>
-          <Route path="one" element={<h4>첫주문시 양배츄즙서비스</h4>} />
-          <Route path="two" element={<h4>생일기념쿠폰받기</h4>} />
-        </Route>
       </Routes>
+      <button
+        onClick={() => {
+          axios
+            .get("https://codingapple1.github.io/shop/data2.json")
+            .then((result) => {
+              let copy = [...shoes, ...result.data];
+              updateShoes(copy);
+            });
+        }}
+      >
+        더보기
+      </button>
     </div>
   );
 }
