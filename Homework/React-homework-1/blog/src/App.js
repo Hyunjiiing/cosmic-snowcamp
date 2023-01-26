@@ -11,9 +11,9 @@ import {
   Navigate,
 } from "react-router-dom";
 import { user, items, articles } from "./data.js";
-import Info from "./infoPage";
-import Articles from "./articlesPage";
-import Works from "./worksPage";
+import Info from "./components/infoPage";
+import Articles from "./components/articlesPage";
+import Works from "./components/worksPage";
 
 function App() {
   return (
@@ -63,7 +63,7 @@ const ButtonBar = (probs) => {
           probs.navigate("articles");
         }}
       >
-        글{/* list.length 써서 게시물 갯수 파악 */}
+        글{items.length}
       </button>
       <button
         className={btnClass[2]}
@@ -72,7 +72,7 @@ const ButtonBar = (probs) => {
           probs.navigate("works");
         }}
       >
-        작품
+        작품{articles.articlesSrc.length}
       </button>
     </>
   );
