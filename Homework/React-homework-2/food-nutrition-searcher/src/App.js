@@ -1,25 +1,36 @@
 import "./App.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import NutritionPage from "./components/nutritionPage";
-import { PieChart } from "./components/piechartPage";
+import PieChartComponent from "./components/piechartPage";
 
 function App() {
+  let [wait, ChangeWait] = useState(false);
   let [itemContents, setItemContents] = useState([]);
+  let [content, changeContent] = useState("");
 
   const request = async () => {
     console.log("버튼이 눌렸슴둥!!");
-    let url =
-      "http://openapi.foodsafetykorea.go.kr/api/4553171ad33c41b59f9e/I2790/json/1/100";
+    let url = `http://openapi.foodsafetykorea.go.kr/api/4553171ad33c41b59f9e/I2790/json/1/100/DESC_KOR=${content}`;
     try {
+      ChangeWait(true);
       const sampleData = await axios.get(url);
       let result = sampleData.data.I2790.row.map((a) => {
-        let ret = [a.DESC_KOR, a.NUTR_CONT1];
+        let ret = [
+          a.DESC_KOR,
+          a.GROUP_NAME,
+          a.MAKER_NAME,
+          a.NUTR_CONT1,
+          a.NUTR_CONT2,
+          a.NUTR_CONT3,
+          a.NUTR_CONT4,
+          a.NUTR_CONT5,
+        ];
         return ret;
       });
-
       setItemContents(result);
+      ChangeWait(false);
     } catch (e) {
       console.log(e);
     }
@@ -27,34 +38,30 @@ function App() {
 
   return (
     <div className="App">
-      <>
-        <Link to="/">홈홈홈</Link>
-        <Link to="/nutritionPage">영야영양</Link>
-        <Link to="/piechartPage">파이차트</Link>
-      </>
       <h1>음식 영양성분 검색기</h1>
       <div className="input-group mb-3">
         <input
           type="input"
           placeholder="음식을 입력하세요"
           className="form-control"
+          onChange={(e) => {
+            changeContent(e.target.value);
+          }}
         />
         <input
+          onClick={request}
           type="button"
           value="입력"
           className="btn btn-outline-secondary"
         />
       </div>
-      <button onClick={request}>버튼</button>
-      <div>
-        {itemContents.map((a) => {
-          return (
-            <div key="{a}">
-              {a[0]} {a[1]}kcal
-            </div>
-          );
-        })}
-      </div>
+      {wait == true ? (
+        <p>기다려주세요</p>
+      ) : (
+        <div>
+          <NutritionPage itemContents={itemContents}></NutritionPage>
+        </div>
+      )}
 
       <br></br>
       <Routes>
@@ -63,7 +70,10 @@ function App() {
           path="/nutritionPage"
           element={<NutritionPage></NutritionPage>}
         />
-        <Route path="/piechartPage" element={<PieChart></PieChart>} />
+        <Route
+          path="/piechartPage"
+          element={<PieChartComponent></PieChartComponent>}
+        />
       </Routes>
     </div>
   );

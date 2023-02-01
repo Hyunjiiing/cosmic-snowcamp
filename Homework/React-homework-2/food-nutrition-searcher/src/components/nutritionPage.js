@@ -1,20 +1,37 @@
-import { Button } from "react-bootstrap";
+import Table from "react-bootstrap/Table";
+import { Routes, Route, Link, Outlet } from "react-router-dom";
+import {
+  PieChart,
+  Pie,
+  Legend,
+  Sector,
+  Cell,
+  ResponsiveContainer,
+} from "recharts";
 
-function NutritionPage() {
+function NutritionPage(props) {
   return (
-    <div className="textLeft">
-      <Button variant="outline-secondary">
-        백종원의 백석된장 장류 백석영농조합법인
-      </Button>
-      <br></br>
-      <Button variant="outline-secondary">
-        백종원의돼지김치찜 즉석식품류 (주)진한식품
-      </Button>
-      <br></br>
-      <Button variant="outline-secondary">
-        백종원의매콤닭볶음탕 즉석식품류 (주)진한식품
-      </Button>
-    </div>
+    <Table bordered hover>
+      <tbody>
+        {props.itemContents.map((a, idx) => {
+          return (
+            <tr>
+              <td>{idx}</td>
+              <Link
+                to={{
+                  pathname: "/piechartPage",
+                  state: { fat: a[6], protein: a[5], carbonydrate: a[4] },
+                }}
+              >
+                {a[0]}
+              </Link>
+              <td>{a[1]}</td>
+              <td>{a[2]}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </Table>
   );
 }
 export default NutritionPage;
