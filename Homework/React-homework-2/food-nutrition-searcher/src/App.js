@@ -9,6 +9,7 @@ function App() {
   let [wait, ChangeWait] = useState(false);
   let [itemContents, setItemContents] = useState([]);
   let [content, changeContent] = useState("");
+  let navigate = useNavigate();
 
   const request = async () => {
     console.log("버튼이 눌렸슴둥!!");
@@ -49,26 +50,26 @@ function App() {
           }}
         />
         <input
-          onClick={request}
+          onClick={() => {
+            request();
+            navigate("/nutritionPage");
+          }}
           type="button"
           value="입력"
           className="btn btn-outline-secondary"
         />
       </div>
-      {wait == true ? (
-        <p>기다려주세요</p>
-      ) : (
-        <div>
-          <NutritionPage itemContents={itemContents}></NutritionPage>
-        </div>
-      )}
-
       <br></br>
       <Routes>
         <Route path="/" element={<div></div>} />
         <Route
           path="/nutritionPage"
-          element={<NutritionPage></NutritionPage>}
+          element={
+            <NutritionPage
+              wait={wait}
+              itemContents={itemContents}
+            ></NutritionPage>
+          }
         />
         <Route
           path="/piechartPage"

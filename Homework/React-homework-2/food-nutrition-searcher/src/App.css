@@ -1,6 +1,7 @@
 .onCursor:hover {
   background-color: pink;
   color: black;
+  cursor: pointer;
 }
 
 .textLeft {

@@ -7,13 +7,14 @@ import {
   Cell,
   ResponsiveContainer,
 } from "recharts";
+import { useLocation } from "react-router-dom";
 
 const PieChartComponent = (props) => {
-  console.log(props);
+  const location = useLocation();
   const data = [
-    { name: "fat", value: 9 },
-    { name: "protein", value: 4 },
-    { name: "carbonydrate", value: 4 },
+    { name: "fat", value: location.state.fat * 9 },
+    { name: "protein", value: location.state.protein * 4 },
+    { name: "carbonydrate", value: location.state.carbonydrate * 4 },
   ];
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28"];
@@ -48,9 +49,9 @@ const PieChartComponent = (props) => {
   return (
     <>
       <div>
-        <div class="row d-flex justify-content-center text-center">
-          <h1>{props.title}</h1>
-          <h3>1회 섭취량 당 칼로리 {props.calorie}</h3>
+        <div className="row d-flex justify-content-center text-center">
+          <h1>{location.state.foodName}</h1>
+          <h3>1회 섭취량 당 칼로리 {location.state.calorie}</h3>
           <hr />
           <div className="col-md-8">
             <ResponsiveContainer
@@ -59,13 +60,12 @@ const PieChartComponent = (props) => {
               className="text-center"
             >
               <PieChart width={400} height={400}>
-                <Legend layout="vertical" verticalAlign="top" align="top" />
                 <Pie
                   data={data}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={renderCustomizedLabel}
+                  label={({ name, value }) => `${name}: ${value}`}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
